@@ -1,0 +1,20 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  margin: 20px;
+}
+
+.btn {
+  border: 1px solid gray;
+  padding: 10px 20px;
+}
+
+.input-file {
+  margin: 30px 0;
+}
+
+.input-file input {
+  visibility: hidden;
+}

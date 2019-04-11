@@ -1,0 +1,7 @@
+.input-file {
+  margin: 30px 0;
+}
+
+.input-file input {
+  visibility: hidden;
+}
