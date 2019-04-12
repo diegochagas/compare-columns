@@ -1,21 +1,21 @@
 import React from 'react';
 import './InputFile.css';
 
-export default class InputFile extends React.Component {
-  render(){
+const InputFile = ({inputId, fileType, onInputCSVChange, spanRef}) => {
     return(
       <div className="input-file">
-        <label className="btn" htmlFor={inputId}>Choose csv file</label>
+        <label className="btn" htmlFor={inputId}>Choose {fileType} file</label>
         <input id={inputId} 
           type="file" 
-          onChange={this.props.onInputCSVChange} 
+          onChange={onInputCSVChange} 
           accept={fileType} 
         />
         <div className="selected-file">
           <span>Selected file: </span>
-          <span ref={this.props.spanRef}>none</span>
+          <span ref={spanRef}>none</span>
         </div>
       </div>
     );
-  }
 }
+
+export default InputFile;

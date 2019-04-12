@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import InputFile from './components/InputFile';
 
 class App extends Component {
   constructor(props){
@@ -20,22 +21,14 @@ class App extends Component {
           </div>
         </header>
         <div className="App-body">
-          <div className="input-file">
-            <label className="btn" htmlFor="csv-file">Choose csv file</label>
-            <input id="csv-file" type="file" onChange={this.onInputCSVChange} accept=".csv" />
-            <div className="selected-file">
-              <span>Selected file: </span>
-              <span ref={this.selectedFile1}>none</span>
-            </div>
-          </div>
-          <div className="input-file">
-            <label className="btn" htmlFor="csv-file2">Choose csv2 file</label>
-            <input id="csv-file2" type="file" onChange={this.onInputCSVChange2} accept=".csv" />
-            <div className="selected-file">
-              <span>Selected file: </span>
-              <span ref={this.selectedFile2}>none</span>
-            </div>
-          </div>
+          <InputFile inputId="csv-file" 
+            onInputCSVChange={this.onInputCSVChange} 
+            fileType=".csv"
+            spanRef={this.selectedFile1} />
+          <InputFile inputId="csv-file2" 
+            onInputCSVChange={this.onInputCSVChange2} 
+            fileType=".csv"
+            spanRef={this.selectedFile2} />
           <div className="container-btn">
             <button className="btn" onClick={this.compareColumns}>Compare columns</button>
             <textarea className="" rows="20" ref={this.textAreaRef}></textarea>
