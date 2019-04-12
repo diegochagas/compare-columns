@@ -1,7 +1,24 @@
 .input-file {
-  margin: 30px 0;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin: 20px;
+  max-width: 300px;
+  text-align: center;
+}
+
+.input-description {
+  background-color: lightgray;
+  margin-bottom: 20px;
+  padding: 10px;
 }
 
 .input-file input {
   visibility: hidden;
+}
+
+.selected-file {
+  display: inline-block;
+  border: 1px solid lightgray;
+  padding: 10px 20px;
+  margin-bottom: 20px;
 }

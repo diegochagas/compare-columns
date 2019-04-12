@@ -15,24 +15,29 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <div className="input-file">
-            <label className="btn" htmlFor="json-file">Choose paremeter json file</label>
-            <input id="json-file" type="file" onChange={this.onInputJSONChange} accept=".json"/>
-          </div>
+          <h1>Compare columns</h1>
+          <InputFile 
+            inputDescription="Chooose parameter"
+            inputId="json-file" 
+            onInputCSVChange={this.onInputCSVChange} 
+            fileType=".json"
+            spanRef={this.selectedFile1} />
         </header>
         <div className="App-body">
-          <InputFile inputId="csv-file" 
+          <InputFile 
+            inputId="csv-file" 
             onInputCSVChange={this.onInputCSVChange} 
             fileType=".csv"
             spanRef={this.selectedFile1} />
-          <InputFile inputId="csv-file2" 
+          <InputFile 
+            inputId="csv-file2" 
             onInputCSVChange={this.onInputCSVChange2} 
             fileType=".csv"
             spanRef={this.selectedFile2} />
-          <div className="container-btn">
-            <button className="btn" onClick={this.compareColumns}>Compare columns</button>
-            <textarea className="" rows="20" ref={this.textAreaRef}></textarea>
-          </div>
+        </div>
+        <div className="container-btn">
+          <button className="btn" onClick={this.compareColumns}>Compare columns</button>
+          <textarea rows="20" ref={this.textAreaRef}></textarea>
         </div>
       </div>
     );

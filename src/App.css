@@ -1,22 +1,25 @@
 .App {
+  color: gray;
   margin: 20px;
 }
 
 .App-header {
-  text-align: center;
-}
-
-.input-file {
-  border: 1px solid lightgray;
   border-radius: 5px;
-  margin: 20px 0;
-  max-width: 200px;
-  padding: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+}
+
+.App-header h1 {
   text-align: center;
 }
 
-.input-file input {
-  visibility: hidden;
+.App-body {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .btn {
@@ -27,17 +30,16 @@
   display: block;
   font-size: 16px;
   font-weight: bold;
-  padding: 10px 20px;
-}
-
-.selected-file {
-  display: inline-block;
-  border: 1px solid lightgray;
+  margin: 10px 20px;
   padding: 10px 20px;
 }
 
 .container-btn {
   text-align: center;
+}
+
+.container-btn button {
+  margin: 0 auto;
 }
 
 textarea {
