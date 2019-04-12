@@ -14,25 +14,33 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-        <div className="input-file">
-          <label className="btn" htmlFor="json-file">Choose paremeter json file</label>
-          <input id="json-file" type="file" onChange={this.onInputJSONChange} accept=".json"/>
-        </div>
-        <div className="input-file">
-          <label className="btn" htmlFor="csv-file">Choose csv file</label>
-          <input id="csv-file" type="file" onChange={this.onInputCSVChange} accept=".csv" />
-        </div>
-        <p ref={this.selectedFile1}></p>
-        <div className="input-file">
-          <label className="btn" htmlFor="csv-file2">Choose csv2 file</label>
-          <input id="csv-file2" type="file" onChange={this.onInputCSVChange2} accept=".csv" />
-        </div>
-        <p ref={this.selectedFile2}></p>
+          <div className="input-file">
+            <label className="btn" htmlFor="json-file">Choose paremeter json file</label>
+            <input id="json-file" type="file" onChange={this.onInputJSONChange} accept=".json"/>
+          </div>
         </header>
-        <article>
-          <button className="btn" onClick={this.compareColumns}>Compare columns</button>
-          <textarea className="" rows="25" cols="80" ref={this.textAreaRef}></textarea>
-        </article>
+        <div className="App-body">
+          <div className="input-file">
+            <label className="btn" htmlFor="csv-file">Choose csv file</label>
+            <input id="csv-file" type="file" onChange={this.onInputCSVChange} accept=".csv" />
+            <div className="selected-file">
+              <span>Selected file: </span>
+              <span ref={this.selectedFile1}>none</span>
+            </div>
+          </div>
+          <div className="input-file">
+            <label className="btn" htmlFor="csv-file2">Choose csv2 file</label>
+            <input id="csv-file2" type="file" onChange={this.onInputCSVChange2} accept=".csv" />
+            <div className="selected-file">
+              <span>Selected file: </span>
+              <span ref={this.selectedFile2}>none</span>
+            </div>
+          </div>
+          <div className="container-btn">
+            <button className="btn" onClick={this.compareColumns}>Compare columns</button>
+            <textarea className="" rows="20" ref={this.textAreaRef}></textarea>
+          </div>
+        </div>
       </div>
     );
   }
@@ -116,6 +124,7 @@ class App extends Component {
           const hasDiscrepancys =  value1 !== value2;
           if(hasDiscrepancys){
             this.textAreaRef.current.value += `
+            ====================================================== 
               Table1[${key1}]: ${value1}
               Table2[${key2}]: ${value2} 
               Has discrepancys: ${hasDiscrepancys ? "YES" : "NO"}`;
