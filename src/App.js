@@ -8,7 +8,8 @@ class App extends Component {
     this.textAreaRef = React.createRef();
     this.selectedFile1 = React.createRef();
     this.selectedFile2 = React.createRef();
-    this.state = {table1: null, table2: null};
+    this.selectedFile3 = React.createRef();
+    this.state = {parameters: null, table1: null, table2: null};
   }
 
   render() {
@@ -19,21 +20,21 @@ class App extends Component {
           <InputFile 
             inputDescription="Chooose parameter"
             inputId="json-file" 
-            onInputCSVChange={this.onInputCSVChange} 
+            onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile1)} 
             fileType=".json"
             spanRef={this.selectedFile1} />
         </header>
         <div className="App-body">
           <InputFile 
             inputId="csv-file" 
-            onInputCSVChange={this.onInputCSVChange} 
-            fileType=".csv"
-            spanRef={this.selectedFile1} />
-          <InputFile 
-            inputId="csv-file2" 
-            onInputCSVChange={this.onInputCSVChange2} 
+            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table1", this.selectedFile2)} 
             fileType=".csv"
             spanRef={this.selectedFile2} />
+          <InputFile 
+            inputId="csv-file2" 
+            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table2", this.selectedFile3)} 
+            fileType=".csv"
+            spanRef={this.selectedFile3} />
         </div>
         <div className="container-btn">
           <button className="btn" onClick={this.compareColumns}>Compare columns</button>
@@ -42,31 +43,19 @@ class App extends Component {
       </div>
     );
   }
-  
-  onInputCSVChange = event => {
-    const reader = new FileReader();
+
+  onInputChange(event, convertToJSON, stateName, elementToShowFile) {
     const file = event.target.files[0];
+    const reader = new FileReader();
     reader.readAsText(file);
     reader.onload = event => {
-      const CSV = event.target.result; 
-      const arrayCSV = this.convertCSVToJSON(CSV);
-      this.setState({table1: arrayCSV});
-      this.selectedFile1.current.innerHTML = file.name;
+      const content = event.target.result;
+      const arrayJSON = convertToJSON(content);
+      this.setState({[stateName]: arrayJSON});
+      elementToShowFile.current.innerHTML = file.name;
     }
   }
 
-  onInputCSVChange2 = event => {
-    const reader = new FileReader();
-    const file = event.target.files[0];
-    reader.readAsText(file);
-    reader.onload = event => {
-      const CSV = event.target.result; 
-      const arrayCSV = this.convertCSVToJSON(CSV);
-      this.setState({table2: arrayCSV});
-      this.selectedFile2.current.innerHTML = file.name;
-    }
-  }
-  
   convertCSVToJSON(CSVContent){
     const splitedBrokenLine = CSVContent.split('\n');
     const sizeWithOnlyCommas = 12;
