@@ -7,9 +7,8 @@ class App extends Component {
     super(props);
     this.selectedFile1 = React.createRef();
     this.selectedFile2 = React.createRef();
-    this.selectedFile3 = React.createRef();
     this.textAreaRef = React.createRef();
-    this.state = {parameters: null, table1: null, table2: null};
+    this.state = {table1: null, table2: null};
   }
 
   render() {
@@ -17,24 +16,18 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Compare columns</h1>
-          <InputFile 
-            inputDescription="Chooose parameter"
-            inputId="json-file" 
-            onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile1)} 
-            fileType=".json"
-            spanRef={this.selectedFile1} />
         </header>
         <div className="App-body">
           <InputFile 
             inputId="csv-file" 
-            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table1", this.selectedFile2)} 
+            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table1", this.selectedFile1)} 
             fileType=".csv"
-            spanRef={this.selectedFile2} />
+            spanRef={this.selectedFile1} />
           <InputFile 
             inputId="csv-file2" 
-            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table2", this.selectedFile3)} 
+            onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table2", this.selectedFile2)} 
             fileType=".csv"
-            spanRef={this.selectedFile3} />
+            spanRef={this.selectedFile2} />
         </div>
         <div className="container-btn">
           <button className="btn" onClick={this.compareColumns}>Compare columns</button>
@@ -45,6 +38,7 @@ class App extends Component {
   }
 
   onInputChange(event, convertToJSON, stateName, elementToShowFile) {
+    console.log(event.target.files[0]);
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(file);
@@ -86,8 +80,9 @@ class App extends Component {
   }
   
   compareColumns = () => {
-    const {parameters, table1, table2} = this.state;
-    this.verifyIfAllTheFilesWereSelected(parameters, table1, table2);
+    const {table1, table2} = this.state;
+    const discrepantTables = [];
+    this.verifyIfAllTheFilesWereSelected(table1, table2);
     if(!(table1 === null) && !(table2 === null)){
       const amountOfRows = table1.length;
       let amountOfDiscrepancys = 0;
@@ -104,23 +99,41 @@ class App extends Component {
           const value2 = tb2[key2];
           const hasDiscrepancys = value1 !== value2;
           if(hasDiscrepancys){
-            this.textAreaRef.current.value += this.buildReport(key1, key2, value1, value2);
             amountOfDiscrepancys++;
           }
+          discrepantTables.push(this.buildObject(hasDiscrepancys, key1, key2, value1, value2));
         }
       }
       if(amountOfDiscrepancys === 0){
         this.textAreaRef.current.value = `The tables don't have discrepancys`;
+      } else {
+        const report = this.buildReport(JSON.stringify(discrepantTables));
+        this.textAreaRef.current.value = report;
       }
     }
   }
 
-  buildReport = (hasDiscrepancys, key1, key2, value1, value2) => {
+  buildObject = (hasDiscrepancys, key1, key2, value1, value2) => {
+    const tables = {
+      "hasDiscrepancys": hasDiscrepancys,
+      "from": {
+          "table": "table1",
+          "column": key1,
+          "value": value1
+      },
+      "to": {
+          "table": "table2",
+          "column": key2,
+          "value": value2
+      }
+    }
+    return tables;
+  }
+
+  buildReport = (tables) => {
     const report = `
     ====================================================== 
-      Table1[${key1}]: ${value1}
-      Table2[${key2}]: ${value2} 
-      Has discrepancys: ${hasDiscrepancys ? "YES" : "NO"}`;
+      ${tables.replace}`;
     return report; 
   }
 
