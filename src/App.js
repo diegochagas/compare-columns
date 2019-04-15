@@ -5,10 +5,10 @@ import InputFile from './components/InputFile';
 class App extends Component {
   constructor(props){
     super(props);
-    this.textAreaRef = React.createRef();
     this.selectedFile1 = React.createRef();
     this.selectedFile2 = React.createRef();
     this.selectedFile3 = React.createRef();
+    this.textAreaRef = React.createRef();
     this.state = {parameters: null, table1: null, table2: null};
   }
 
@@ -60,8 +60,7 @@ class App extends Component {
     const splitedBrokenLine = CSVContent.split('\n');
     const sizeWithOnlyCommas = 12;
     const columnsName = splitedBrokenLine[0].split(',');
-    const rows = splitedBrokenLine.filter((row, index) => 
-    index >= 1 && row.length > sizeWithOnlyCommas);
+    const rows = splitedBrokenLine.filter((row, index) => index >= 1 && row.length > sizeWithOnlyCommas);
     let clientList = {};
     let clients = [];
     for(let i = 1; i < rows.length; i++){
@@ -87,13 +86,8 @@ class App extends Component {
   }
   
   compareColumns = () => {
-    const {table1, table2} = this.state;
-    if(table1 === null){
-      alert("Select first file");
-    }
-    if(table2 === null){
-      alert("Select second file");
-    }
+    const {parameters, table1, table2} = this.state;
+    this.verifyIfAllTheFilesWereSelected(parameters, table1, table2);
     if(!(table1 === null) && !(table2 === null)){
       const amountOfRows = table1.length;
       let amountOfDiscrepancys = 0;
@@ -108,13 +102,9 @@ class App extends Component {
           const key2 = jsonObj2[j];
           const value1 = tb1[key1];
           const value2 = tb2[key2];
-          const hasDiscrepancys =  value1 !== value2;
+          const hasDiscrepancys = value1 !== value2;
           if(hasDiscrepancys){
-            this.textAreaRef.current.value += `
-            ====================================================== 
-              Table1[${key1}]: ${value1}
-              Table2[${key2}]: ${value2} 
-              Has discrepancys: ${hasDiscrepancys ? "YES" : "NO"}`;
+            this.textAreaRef.current.value += this.buildReport(key1, key2, value1, value2);
             amountOfDiscrepancys++;
           }
         }
@@ -123,6 +113,23 @@ class App extends Component {
         this.textAreaRef.current.value = `The tables don't have discrepancys`;
       }
     }
+  }
+
+  buildReport = (hasDiscrepancys, key1, key2, value1, value2) => {
+    const report = `
+    ====================================================== 
+      Table1[${key1}]: ${value1}
+      Table2[${key2}]: ${value2} 
+      Has discrepancys: ${hasDiscrepancys ? "YES" : "NO"}`;
+    return report; 
+  }
+
+  verifyIfAllTheFilesWereSelected = (...inputFiles) => {
+    inputFiles.forEach((inputFile, index) => {
+      if(inputFile === null){
+        alert(`Select file ${index}`);
+      }
+    });
   }
 }
 
