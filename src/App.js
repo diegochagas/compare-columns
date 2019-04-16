@@ -7,8 +7,9 @@ class App extends Component {
     super(props);
     this.selectedFile1 = React.createRef();
     this.selectedFile2 = React.createRef();
+    this.selectedFile3 = React.createRef();
     this.textAreaRef = React.createRef();
-    this.state = {table1: null, table2: null};
+    this.state = {parameters: null, table1: null, table2: null};
   }
 
   render() {
@@ -16,6 +17,12 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <h1>Compare columns</h1>
+          <InputFile 
+            inputDescription="Choose parameter"
+            inputId="json-file" 
+            onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile3)} 
+            fileType=".json"
+            spanRef={this.selectedFile3} />
         </header>
         <div className="App-body">
           <InputFile 
@@ -38,7 +45,6 @@ class App extends Component {
   }
 
   onInputChange(event, convertToJSON, stateName, elementToShowFile) {
-    console.log(event.target.files[0]);
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.readAsText(file);
@@ -68,21 +74,14 @@ class App extends Component {
     return clients;
   }
   
-  onInputJSONChange = event => {
-    const reader = new FileReader();
-    const file = event.target.files[0];
-    reader.onload = event => {
-      const obj = JSON.parse(event.target.result);
-      this.textAreaRef.current.value = JSON.stringify(obj[0]);
-    }
-    reader.readAsText(file);
-    this.selectedFile.current.innerHTML = file.name;
-  }
-  
   compareColumns = () => {
-    const {table1, table2} = this.state;
     const discrepantTables = [];
-    this.verifyIfAllTheFilesWereSelected(table1, table2);
+    const {parameters, table1, table2} = this.state;
+    parameters.forEach(parameter => {
+      console.log(parameter.from.column);
+      console.log(parameter.to.column);
+    });
+    this.verifyIfAllTheFilesWereSelected(parameters, table1, table2);
     if(!(table1 === null) && !(table2 === null)){
       const amountOfRows = table1.length;
       let amountOfDiscrepancys = 0;
@@ -92,54 +91,55 @@ class App extends Component {
         const jsonObj1 = Object.keys(tb1);
         const jsonObj2 = Object.keys(tb2);
         const amountOfCells = jsonObj1.length;
-        for(let j = 0; j < amountOfCells; j++){
+        for (let j = 0; j < amountOfCells; j++) {
           const key1 = jsonObj1[j];
           const key2 = jsonObj2[j];
           const value1 = tb1[key1];
           const value2 = tb2[key2];
           const hasDiscrepancys = value1 !== value2;
-          if(hasDiscrepancys){
+          if (hasDiscrepancys) {
             amountOfDiscrepancys++;
           }
-          discrepantTables.push(this.buildObject(hasDiscrepancys, key1, key2, value1, value2));
+          discrepantTables.push(this.buildComparedTablesObject(hasDiscrepancys, key1, key2, value1, value2));
         }
       }
-      if(amountOfDiscrepancys === 0){
+      if (amountOfDiscrepancys === 0) {
         this.textAreaRef.current.value = `The tables don't have discrepancys`;
       } else {
-        const report = this.buildReport(JSON.stringify(discrepantTables));
+        const report = this.buildReport(discrepantTables);
         this.textAreaRef.current.value = report;
       }
     }
   }
 
-  buildObject = (hasDiscrepancys, key1, key2, value1, value2) => {
+  buildComparedTablesObject = (hasDiscrepancys, key1, key2, value1, value2) => {
     const tables = {
       "hasDiscrepancys": hasDiscrepancys,
       "from": {
-          "table": "table1",
-          "column": key1,
-          "value": value1
+        "table": "table1",
+        "column": key1,
+        "value": value1
       },
       "to": {
-          "table": "table2",
-          "column": key2,
-          "value": value2
+        "table": "table2",
+        "column": key2,
+        "value": value2
       }
     }
     return tables;
   }
 
   buildReport = (tables) => {
-    const report = `
-    ====================================================== 
-      ${tables.replace}`;
+    let report = tables.map(table => {
+      return `\n${JSON.stringify(table)}
+        ============================================================================================`;
+    });
     return report; 
   }
 
   verifyIfAllTheFilesWereSelected = (...inputFiles) => {
     inputFiles.forEach((inputFile, index) => {
-      if(inputFile === null){
+      if (inputFile === null) {
         alert(`Select file ${index}`);
       }
     });
