@@ -9,7 +9,7 @@ class App extends Component {
     this.selectedFile2 = React.createRef();
     this.selectedFile3 = React.createRef();
     this.textAreaRef = React.createRef();
-    this.state = {parameters: null, table1: null, table2: null};
+    this.state = {table1: null, table2: null};
   }
 
   render() {
@@ -19,12 +19,14 @@ class App extends Component {
           <h1>Compare value of columns from CSV files </h1>
         </header>
         <div className="App-body">
-          <InputFile 
-            inputDescription="Choose parameter"
-            inputId="json-file" 
-            onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile3)} 
-            fileType=".json"
-            spanRef={this.selectedFile3} />
+          {/* 
+            <InputFile 
+              inputDescription="Choose parameter"
+              inputId="json-file" 
+              onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile3)} 
+              fileType=".json"
+              spanRef={this.selectedFile3} />
+          */}
           <InputFile 
             inputDescription="Select first file"
             inputId="csv-file" 
@@ -78,12 +80,8 @@ class App extends Component {
   
   compareColumns = () => {
     const discrepantTables = [];
-    const {parameters, table1, table2} = this.state;
-    parameters.forEach(parameter => {
-      console.log(parameter.from.column);
-      console.log(parameter.to.column);
-    });
-    this.verifyIfAllTheFilesWereSelected(parameters, table1, table2);
+    const {table1, table2} = this.state;
+    this.verifyIfAllTheFilesWereSelected(table1, table2);
     if(!(table1 === null) && !(table2 === null)){
       const amountOfRows = table1.length;
       let amountOfDiscrepancys = 0;
@@ -101,8 +99,8 @@ class App extends Component {
           const hasDiscrepancys = value1 !== value2;
           if (hasDiscrepancys) {
             amountOfDiscrepancys++;
+            discrepantTables.push(this.buildComparedTablesObject(hasDiscrepancys, key1, key2, value1, value2));
           }
-          discrepantTables.push(this.buildComparedTablesObject(hasDiscrepancys, key1, key2, value1, value2));
         }
       }
       if (amountOfDiscrepancys === 0) {

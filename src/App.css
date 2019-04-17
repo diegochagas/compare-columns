@@ -6,6 +6,7 @@
 .App-header h1 {
   color: lightgray;
   text-align: center;
+  margin: 20px;
 }
 
 .App-body {
@@ -27,6 +28,7 @@
 }
 
 .container-btn {
+  padding: 20px;
   text-align: center;
 }
 
