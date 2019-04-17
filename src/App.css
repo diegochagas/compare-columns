@@ -1,18 +1,10 @@
 .App {
-  color: gray;
-  margin: 20px;
-}
-
-.App-header {
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  padding: 15px;
+  max-width: 880px;
+  margin: 0 auto;
 }
 
 .App-header h1 {
+  color: lightgray;
   text-align: center;
 }
 

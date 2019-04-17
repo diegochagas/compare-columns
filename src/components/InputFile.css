@@ -2,7 +2,7 @@
   border: 1px solid lightgray;
   border-radius: 5px;
   margin: 20px;
-  max-width: 300px;
+  max-width: 250px;
   text-align: center;
 }
 
@@ -14,11 +14,13 @@
 
 .input-file input {
   visibility: hidden;
+  height: 0;
+  width: 0;
 }
 
 .selected-file {
   display: inline-block;
   border: 1px solid lightgray;
   padding: 10px 20px;
-  margin-bottom: 20px;
+  margin: 20px;
 }

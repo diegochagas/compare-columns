@@ -16,21 +16,23 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1>Compare columns</h1>
+          <h1>Compare value of columns from CSV files </h1>
+        </header>
+        <div className="App-body">
           <InputFile 
             inputDescription="Choose parameter"
             inputId="json-file" 
             onInputChange={event => this.onInputChange(event, JSON.parse, "parameters", this.selectedFile3)} 
             fileType=".json"
             spanRef={this.selectedFile3} />
-        </header>
-        <div className="App-body">
           <InputFile 
+            inputDescription="Select first file"
             inputId="csv-file" 
             onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table1", this.selectedFile1)} 
             fileType=".csv"
             spanRef={this.selectedFile1} />
-          <InputFile 
+          <InputFile  
+            inputDescription="Select second file"
             inputId="csv-file2" 
             onInputChange={event => this.onInputChange(event, this.convertCSVToJSON, "table2", this.selectedFile2)} 
             fileType=".csv"
