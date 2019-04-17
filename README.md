@@ -1,6 +1,6 @@
 # Compare Columns
 
-Web app to compare columns from json, csv and xlsx files. 
+Web app to compare columns from csv files.  
 
 ## Used technologies
 
